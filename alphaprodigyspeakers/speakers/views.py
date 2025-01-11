@@ -2,11 +2,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from .models import Service, Booking, Order
-from .forms import BookingForm
+from .models import Service, Booking, Order, Review
+from .forms import BookingForm, ReviewForm
 import paypalrestsdk
 from django.conf import settings
 from django.urls import reverse
+from .utils import send_booking_confirmation_email
+from django.db.models import Q
 
 def home_view(request):
     return render(request, 'home.html')  # Updated path
@@ -17,22 +19,35 @@ def service_list_view(request):
 
 def service_detail_view(request, service_id):
     service = Service.objects.get(id=service_id)
-    return render(request, 'service_detail.html', {'service': service})
-
-def booking_view(request, service_id):
-    service = Service.objects.get(id=service_id)
+    reviews = Review.objects.filter(service=service)
     if request.method == 'POST':
-        form = BookingForm(request.POST)
+        form = ReviewForm(request.POST)
         if form.is_valid():
-            booking = form.save(commit=False)
-            booking.user = request.user
-            booking.service = service
-            booking.save()
-            return redirect('payment', booking_id=booking.id)  # Redirect to payment page
+            review = form.save(commit=False)
+            review.user = request.user
+            review.service = service
+            review.save()
+            return redirect('service_detail', service_id=service.id)
     else:
-        form = BookingForm()
-    return render(request, 'booking.html', {'service': service, 'form': form})
+        form = ReviewForm()
+    return render(request, 'service_detail.html', {'service': service, 'reviews': reviews, 'form': form})
 
+
+def booking_view(request, service_id): 
+    service = Service.objects.get(id=service_id) 
+    if request.method == 'POST': 
+        form = BookingForm(request.POST) 
+        if form.is_valid(): 
+            booking = form.save(commit=False) 
+            booking.user = request.user 
+            booking.service = service 
+            booking.save() 
+            send_booking_confirmation_email(request.user, booking) # Send confirmation email 
+            return redirect('payment', booking_id=booking.id) 
+        else: 
+            form = BookingForm() 
+        return render(request, 'booking.html', {'service': service, 'form': form})
+    
 def register_view(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -107,3 +122,8 @@ def payment_success(request, booking_id):
 
 def payment_cancelled(request):
     return render(request, 'payment_cancelled.html')
+
+def search_view(request): 
+    query = request.GET.get('q') 
+    results = Service.objects.filter(Q(name__icontains=query) | Q(description__icontains=query)) 
+    return render(request, 'search_results.html', {'results': results, 'query': query})

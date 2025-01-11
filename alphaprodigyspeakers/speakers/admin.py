@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Service, Booking, Order
+from .models import Service, Booking, Order, Review
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
@@ -16,3 +16,7 @@ class BookingAdmin(admin.ModelAdmin):
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('booking', 'created_at', 'is_paid')
     list_filter = ('is_paid',)
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('user', 'service', 'rating', 'created_at')

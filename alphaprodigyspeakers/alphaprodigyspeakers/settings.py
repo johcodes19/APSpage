@@ -131,3 +131,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # paypal developer details
 PAYPAL_CLIENT_ID = 'AX9u84li5YdH03GjXBFrZ8Uz0wcDOAgLPCq_f5k6wfMFemnU-t_UYWP7PiMz_o2aYMiLaIngv-ountDS'
 PAYPAL_CLIENT_SECRET = 'EL_wyBp3wg1oTaA2VQi4uBq4CBGGP3TRlrLJiBoZG2gIs98mJp0M2mWE6iwNbstj8hxXPW6m5-FHvgv6'
+
+
+# email notification notification
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'annetdaisymm@gmail.com'
+EMAIL_HOST_PASSWORD = '$&#bien actuas'
+DEFAULT_FROM_EMAIL = 'annetdaisymm@gmail.com'
+

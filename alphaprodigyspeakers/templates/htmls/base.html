@@ -30,6 +30,12 @@
             {% endblock %}
         </h1>
     </header>
+
+    <form method="get" action="{% url 'search' %}">
+        <input type="text" name="q" placeholder="Search services...">
+        <button type="submit">Search</button>
+    </form>
+    
     <main>
         {% block content %}
         {% endblock %}

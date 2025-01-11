@@ -18,3 +18,10 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     is_paid = models.BooleanField(default=False)
     payment_method = models.CharField(max_length=50, blank=True, null=True)  # Track payment method
+
+class Review(models.Model): 
+    user = models.ForeignKey(User, on_delete=models.CASCADE) 
+    service = models.ForeignKey(Service, on_delete=models.CASCADE) 
+    rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)]) 
+    comment = models.TextField() 
+    created_at = models.DateTimeField(auto_now_add=True)
