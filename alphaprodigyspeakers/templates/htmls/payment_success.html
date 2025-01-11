@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Payment Successful
+{% endblock %}
+
+{% block header %}
+    Payment Successful
+{% endblock %}
+
+{% block content %}
+<section id="payment_success">
+    <h2>Thank You!</h2>
+    <p>Your payment for {{ booking.service.name }} has been successful.</p>
+    <p>Booking Date: {{ booking.date }}</p>
+</section>
+{% endblock %}

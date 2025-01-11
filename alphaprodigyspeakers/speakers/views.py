@@ -4,6 +4,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .models import Service, Booking, Order
 from .forms import BookingForm
+import paypalrestsdk
+from django.conf import settings
+from django.urls import reverse
 
 def home_view(request):
     return render(request, 'home.html')  # Updated path
@@ -54,3 +57,53 @@ def order_summary_view(request, booking_id):
     booking = Booking.objects.get(id=booking_id)
     order, created = Order.objects.get_or_create(booking=booking)
     return render(request, 'order_summary.html', {'order': order})
+
+
+reverse
+
+paypalrestsdk.configure({
+    "mode": "sandbox",  # Use "live" for production
+    "client_id": settings.PAYPAL_CLIENT_ID,
+    "client_secret": settings.PAYPAL_CLIENT_SECRET
+})
+
+def payment_view(request, booking_id):
+    booking = Booking.objects.get(id=booking_id)
+    if request.method == 'POST':
+        payment = paypalrestsdk.Payment({
+            "intent": "sale",
+            "payer": {
+                "payment_method": "paypal"},
+            "redirect_urls": {
+                "return_url": request.build_absolute_uri(reverse('payment_success', args=[booking_id])),
+                "cancel_url": request.build_absolute_uri(reverse('payment_cancelled'))},
+            "transactions": [{
+                "item_list": {
+                    "items": [{
+                        "name": booking.service.name,
+                        "sku": "item",
+                        "price": str(booking.service.price),
+                        "currency": "USD",
+                        "quantity": 1}]},
+                "amount": {
+                    "total": str(booking.service.price),
+                    "currency": "USD"},
+                "description": f"Payment for {booking.service.name}"}]})
+        if payment.create():
+            for link in payment.links:
+                if link.rel == "approval_url":
+                    redirect_url = link.href
+                    return redirect(redirect_url)
+        else:
+            return render(request, 'payment_error.html', {"error": payment.error})
+    return render(request, 'payment.html', {'booking': booking})
+
+
+def payment_success(request, booking_id):
+    booking = Booking.objects.get(id=booking_id)
+    booking.is_paid = True
+    booking.save()
+    return render(request, 'payment_success.html', {'booking': booking})
+
+def payment_cancelled(request):
+    return render(request, 'payment_cancelled.html')

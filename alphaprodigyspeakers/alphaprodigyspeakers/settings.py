@@ -127,3 +127,7 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# paypal developer details
+PAYPAL_CLIENT_ID = 'AX9u84li5YdH03GjXBFrZ8Uz0wcDOAgLPCq_f5k6wfMFemnU-t_UYWP7PiMz_o2aYMiLaIngv-ountDS'
+PAYPAL_CLIENT_SECRET = 'EL_wyBp3wg1oTaA2VQi4uBq4CBGGP3TRlrLJiBoZG2gIs98mJp0M2mWE6iwNbstj8hxXPW6m5-FHvgv6'
