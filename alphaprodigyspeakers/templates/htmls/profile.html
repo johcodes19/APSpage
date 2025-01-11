@@ -1,20 +1,22 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Register - Alpha Prodigy Speakers
+    Profile - Alpha Prodigy Speakers
 {% endblock %}
 
 {% block header %}
-    Register
+    Your Profile
 {% endblock %}
 
 {% block content %}
-<section id="register">
-    <h2>Create an Account</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Sign Up</button>
-    </form>
+<section id="profile">
+    <h2>Welcome, {{ user.username }}</h2>
+    <p>Email: {{ user.email }}</p>
+    <h3>Your Bookings</h3>
+    <ul>
+        {% for booking in bookings %}
+        <li>{{ booking.service.name }} on {{ booking.date }}</li>
+        {% endfor %}
+    </ul>
 </section>
 {% endblock %}
