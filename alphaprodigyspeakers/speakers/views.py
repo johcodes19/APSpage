@@ -5,17 +5,15 @@ from .models import Service, Booking, Order
 from .forms import BookingForm
 
 def home_view(request):
-    return render(request, 'home.html')
+    return render(request, 'htmls/home.html')  # Updated path
 
 def service_list_view(request):
     services = Service.objects.all()
-    return render(request, 'service_list.html', {'services': services})
+    return render(request, 'htmls/service_list.html', {'services': services})
 
 def service_detail_view(request, service_id):
     service = Service.objects.get(id=service_id)
-    return render(request, 'service_detail.html', {'service': service})
-
-
+    return render(request, 'htmls/service_detail.html', {'service': service})
 
 def booking_view(request, service_id):
     service = Service.objects.get(id=service_id)
@@ -26,11 +24,10 @@ def booking_view(request, service_id):
             booking.user = request.user
             booking.service = service
             booking.save()
-            return redirect('profile')  # Redirect to profile or confirmation page
+            return redirect('profile')
     else:
         form = BookingForm()
-    return render(request, 'booking.html', {'service': service, 'form': form})
-
+    return render(request, 'htmls/booking.html', {'service': service, 'form': form})
 
 def register_view(request):
     if request.method == 'POST':
@@ -44,11 +41,12 @@ def register_view(request):
             return redirect('home')
     else:
         form = UserCreationForm()
-    return render(request, 'registration/register.html', {'form': form})
+    return render(request, 'htmls/registration/register.html', {'form': form})
 
 def profile_view(request):
     # Show user profile and past bookings
-    return render(request, 'profile.html')
+    return render(request, 'htmls/profile.html')
+
 
 def order_summary_view(request, booking_id):
     booking = Booking.objects.get(id=booking_id)
