@@ -14,6 +14,7 @@
     <form method="post">
         {% csrf_token %}
         <!-- Add your booking form fields here -->
+        <p>Price: {{ service.price }} USD</p>
         <button type="submit">Book Now</button>
     </form>
 </section>
