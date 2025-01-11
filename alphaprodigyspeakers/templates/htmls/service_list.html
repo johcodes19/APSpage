@@ -11,13 +11,15 @@
 {% block content %}
 <section id="services">
     <h2>Services We Offer</h2>
-    <ul>
+    <div class="service-container">
         {% for service in services %}
-        <li>
-            <a href="{% url 'service_detail' service.id %}">{{ service.name }}</a>
-            - {{ service.price }} USD
-        </li>
+        <div class="service-box">
+            <h3>{{ service.name }}</h3>
+            <p>{{ service.description }}</p>
+            <p>Price: {{ service.price }} USD</p>
+            <a href="{% url 'service_detail' service.id %}" class="btn">View Details</a>
+        </div>
         {% endfor %}
-    </ul>
+    </div>
 </section>
 {% endblock %}

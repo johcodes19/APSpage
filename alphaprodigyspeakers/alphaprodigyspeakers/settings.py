@@ -50,6 +50,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000']
+
 ROOT_URLCONF = 'alphaprodigyspeakers.urls'
 
 TEMPLATES = [
