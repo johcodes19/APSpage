@@ -28,7 +28,7 @@ def booking_view(request, service_id):
             booking.user = request.user
             booking.service = service
             booking.save()
-            return redirect('profile')
+            return redirect('payment', booking_id=booking.id)  # Redirect to payment page
     else:
         form = BookingForm()
     return render(request, 'booking.html', {'service': service, 'form': form})
