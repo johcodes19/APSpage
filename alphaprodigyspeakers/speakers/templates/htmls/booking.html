@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Book {{ service.name }} - Alpha Prodigy Speakers{
-% endblock %}
+    Book {{ service.name }} - Alpha Prodigy Speakers
+{% endblock %}
 
 {% block header %}
     Book {{ service.name }}
@@ -13,7 +13,7 @@
     <h2>Booking Form</h2>
     <form method="post">
         {% csrf_token %}
-        <!-- Add your booking form fields here -->
+        {{ form.as_p }}
         <p>Price: {{ service.price }} USD</p>
         <button type="submit">Book Now</button>
     </form>

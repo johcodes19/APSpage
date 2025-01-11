@@ -13,9 +13,15 @@
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="{% url 'service_list' %}">Services</a></li>
                 <li><a href="{% url 'profile' %}">Profile</a></li>
-                <li><a href="{% url 'register' %}">Sign Up</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'register' %}">Sign Up</a></li>
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                {% endif %}
             </ul>
         </nav>
+        
         <h1>
             {% block header %}
                 Alpha Prodigy Speakers

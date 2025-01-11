@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Order Summary - Alpha Prodigy Speakers
+{% endblock %}
+
+{% block header %}
+    Order Summary
+{% endblock %}
+
+{% block content %}
+<section id="order_summary">
+    <h2>Order Summary</h2>
+    <p>Service: {{ order.booking.service.name }}</p>
+    <p>Date: {{ order.booking.date }}</p>
+    <p>Total Price: {{ order.booking.service.price }} USD</p>
+    <button>Proceed to Payment</button>
+</section>
+{% endblock %}
