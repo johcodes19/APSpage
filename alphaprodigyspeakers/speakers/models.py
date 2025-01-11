@@ -18,4 +18,3 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     is_paid = models.BooleanField(default=False)
     payment_method = models.CharField(max_length=50, blank=True, null=True)  # Track payment method
-s
