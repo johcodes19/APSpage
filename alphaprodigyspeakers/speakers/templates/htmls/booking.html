@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Book {{ service.name }} - Alpha Prodigy Speakers
+{% endblock %}
+
+{% block header %}
+    Book {{ service.name }}
+{% endblock %}
+
+{% block content %}
+<section id="booking">
+    <h2>Booking Form</h2>
+    <form method="post">
+        {% csrf_token %}
+        <!-- Add your booking form fields here -->
+        <button type="submit">Book Now</button>
+    </form>
+</section>
+{% endblock %}

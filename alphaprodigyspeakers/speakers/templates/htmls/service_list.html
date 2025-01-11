@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Services - Alpha Prodigy Speakers
+{% endblock %}
+
+{% block header %}
+    Our Services
+{% endblock %}
+
+{% block content %}
+<section id="services">
+    <h2>Services We Offer</h2>
+    <ul>
+        {% for service in services %}
+        <li>
+            <a href="{% url 'service_detail' service.id %}">{{ service.name }}</a>
+            - {{ service.price }} USD
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+{% endblock %}
