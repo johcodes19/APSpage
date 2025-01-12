@@ -1,20 +1,16 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Book {{ service.name }} - Alpha Prodigy Speakers
-{% endblock %}
-
-{% block header %}
-    Book {{ service.name }}
+    Book Service
 {% endblock %}
 
 {% block content %}
 <section id="booking">
-    <h2>Booking Form</h2>
+    <h2>Book {{ service.name }}</h2>
+    <p>Have me speak at your event for {{ service.price }} USD</p>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <p>Price: {{ service.price }} USD</p>
         <button type="submit" class="btn">Book Now</button>
     </form>
 </section>

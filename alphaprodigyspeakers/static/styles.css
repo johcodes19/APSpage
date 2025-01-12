@@ -166,6 +166,22 @@ button[type="submit"]:hover, .btn:hover {
     transform: scale(1.05); /* Slightly larger on hover */
 }
 
+/* Search Bar Styling */
+input[type="text"] {
+    padding: 10px;
+    border: 2px solid navy;
+    border-radius: 5px;
+    width: calc(100% - 22px); /* Full width minus padding and border */
+    max-width: 300px;
+    margin-right: 10px;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus {
+    border-color: skyblue;
+    outline: none;
+}
+
 /* Search Button Styling */
 input[type="submit"], button[type="submit"] {
     display: inline-block;

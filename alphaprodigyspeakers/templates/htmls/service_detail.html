@@ -29,7 +29,7 @@
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit">Submit Review</button>
+            <button type="submit" class="btn">Submit Review</button>
         </form>
     {% else %}
         <p>You need to book this service before you can leave a review.</p>

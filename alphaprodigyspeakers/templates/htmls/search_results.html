@@ -1,21 +1,26 @@
-
 {% extends 'base.html' %}
 
 {% block title %}
     Search Results
 {% endblock %}
 
+{% block header %}
+    Search Results for "{{ query }}"
+{% endblock %}
+
 {% block content %}
-<section id="search_results">
-    <h2>Search Results for "{{ query }}"</h2>
+<section id="search-results">
     {% if results %}
         <ul>
-        {% for service in results %}
-            <li><a href="{% url 'service_detail' service.id %}">{{ service.name }}</a></li>
-        {% endfor %}
+            {% for service in results %}
+                <li>
+                    <h3><a href="{% url 'service_detail' service.id %}">{{ service.name }}</a></h3>
+                    <p>{{ service.description }}</p>
+                </li>
+            {% endfor %}
         </ul>
     {% else %}
-        <p>No results found.</p>
+        <p>No results found for "{{ query }}". Please try again with a different keyword.</p>
     {% endif %}
 </section>
 {% endblock %}

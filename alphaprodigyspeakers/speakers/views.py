@@ -36,7 +36,6 @@ def service_detail_view(request, service_id):
         form = ReviewForm()
     return render(request, 'service_detail.html', {'service': service, 'reviews': reviews, 'form': form, 'has_booked': has_booked})
 
-
 def booking_view(request, service_id):
     service = Service.objects.get(id=service_id)
     if request.method == 'POST':
@@ -46,7 +45,6 @@ def booking_view(request, service_id):
             booking.user = request.user
             booking.service = service
             booking.save()
-            send_booking_confirmation_email(request.user, booking)
             return redirect('payment', booking_id=booking.id)
     else:
         form = BookingForm()
@@ -130,7 +128,12 @@ def payment_success(request, booking_id):
 def payment_cancelled(request):
     return render(request, 'payment_cancelled.html')
 
-def search_view(request): 
-    query = request.GET.get('q') 
-    results = Service.objects.filter(Q(name__icontains=query) | Q(description__icontains=query)) 
-    return render(request, 'search_results.html', {'results': results, 'query': query})
+from django.shortcuts import render
+from .models import Service
+
+def search_view(request):
+    query = request.GET.get('q')
+    results = []
+    if query:
+        results = Service.objects.filter(name__icontains=query)  # Filter services by name containing the query
+    return render(request, 'search_results.html', {'query': query, 'results': results})
