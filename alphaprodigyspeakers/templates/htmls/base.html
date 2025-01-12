@@ -7,8 +7,8 @@
     <title>{% block title %}Alpha Prodigy Speakers{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
+
 <body>
-    
     <header>
         <nav>
             <ul>
@@ -16,14 +16,22 @@
                 <li><a href="{% url 'service_list' %}">Services</a></li>
                 <li><a href="{% url 'profile' %}">Profile</a></li>
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                    <li>
+                        <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" 
+                                style="background: 
+                                none; border: none; 
+                                color: white; 
+                                cursor: pointer;">
+                                Logout</button>
+                        </form>
+                    </li>
                 {% else %}
-                    <li><a href="{% url 'register' %}">Sign Up</a></li>
                     <li><a href="{% url 'login' %}">Login</a></li>
                 {% endif %}
             </ul>
         </nav>
-        
         <h1>
             {% block header %}
                 Alpha Prodigy Speakers
@@ -33,9 +41,9 @@
 
     <form method="get" action="{% url 'search' %}">
         <input type="text" name="q" placeholder="Search services...">
-        <button type="submit">Search</button>
+        <button type="submit" class="btn">Search</button>
     </form>
-    
+
     <main>
         {% block content %}
         {% endblock %}
@@ -43,7 +51,5 @@
     <footer>
         <p>&copy; 2025 Alpha Prodigy Speakers. All rights reserved.</p>
     </footer>
-
 </body>
 </html>
-

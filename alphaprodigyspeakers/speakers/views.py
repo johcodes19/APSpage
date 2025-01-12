@@ -20,7 +20,11 @@ def service_list_view(request):
 def service_detail_view(request, service_id):
     service = Service.objects.get(id=service_id)
     reviews = Review.objects.filter(service=service)
-    if request.method == 'POST':
+    if request.user.is_authenticated:
+        has_booked = Booking.objects.filter(user=request.user, service=service).exists()
+    else:
+        has_booked = False
+    if request.method == 'POST' and has_booked:
         form = ReviewForm(request.POST)
         if form.is_valid():
             review = form.save(commit=False)
@@ -30,23 +34,24 @@ def service_detail_view(request, service_id):
             return redirect('service_detail', service_id=service.id)
     else:
         form = ReviewForm()
-    return render(request, 'service_detail.html', {'service': service, 'reviews': reviews, 'form': form})
+    return render(request, 'service_detail.html', {'service': service, 'reviews': reviews, 'form': form, 'has_booked': has_booked})
 
 
-def booking_view(request, service_id): 
-    service = Service.objects.get(id=service_id) 
-    if request.method == 'POST': 
-        form = BookingForm(request.POST) 
-        if form.is_valid(): 
-            booking = form.save(commit=False) 
-            booking.user = request.user 
-            booking.service = service 
-            booking.save() 
-            send_booking_confirmation_email(request.user, booking) # Send confirmation email 
-            return redirect('payment', booking_id=booking.id) 
-        else: 
-            form = BookingForm() 
-        return render(request, 'booking.html', {'service': service, 'form': form})
+def booking_view(request, service_id):
+    service = Service.objects.get(id=service_id)
+    if request.method == 'POST':
+        form = BookingForm(request.POST)
+        if form.is_valid():
+            booking = form.save(commit=False)
+            booking.user = request.user
+            booking.service = service
+            booking.save()
+            send_booking_confirmation_email(request.user, booking)
+            return redirect('payment', booking_id=booking.id)
+    else:
+        form = BookingForm()
+    return render(request, 'booking.html', {'service': service, 'form': form})
+
     
 def register_view(request):
     if request.method == 'POST':
@@ -64,8 +69,10 @@ def register_view(request):
 
 @login_required 
 def profile_view(request):
-     bookings = Booking.objects.filter(user=request.user) 
-     return render(request, 'profile.html', {'bookings': bookings})
+    if not request.user.is_authenticated:
+        return redirect('login')
+    bookings = Booking.objects.filter(user=request.user)
+    return render(request, 'profile.html', {'bookings': bookings})
 
 
 def order_summary_view(request, booking_id):

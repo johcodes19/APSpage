@@ -139,6 +139,10 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'annetdaisymm@gmail.com'
-EMAIL_HOST_PASSWORD = '$&#bien actuas'
+EMAIL_HOST_PASSWORD = 'pkka hfcn bfvc ckca'
 DEFAULT_FROM_EMAIL = 'annetdaisymm@gmail.com'
 
+AUTHENTICATION_BACKENDS = ['speakers.authentication.EmailBackend', 'django.contrib.auth.backends.ModelBackend']
+LOGIN_URL = 'login' 
+LOGIN_REDIRECT_URL = 'profile' 
+LOGOUT_REDIRECT_URL = 'home'

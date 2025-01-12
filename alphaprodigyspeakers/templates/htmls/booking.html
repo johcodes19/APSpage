@@ -15,7 +15,7 @@
         {% csrf_token %}
         {{ form.as_p }}
         <p>Price: {{ service.price }} USD</p>
-        <button type="submit">Book Now</button>
+        <button type="submit" class="btn">Book Now</button>
     </form>
 </section>
 {% endblock %}

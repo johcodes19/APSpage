@@ -1,8 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %}Login - Alpha Prodigy Speakers{% endblock %}
+{% block title %}
+    Login - Alpha Prodigy Speakers
+{% endblock %}
 
-{% block header %}Login{% endblock %}
+{% block header %}
+    Login
+{% endblock %}
 
 {% block content %}
 <section id="login">
@@ -10,7 +14,7 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Login</button>
+        <button type="submit" class="btn">Login</button>
     </form>
     <p>Don't have an account? <a href="{% url 'register' %}">Sign up</a></p>
 </section>
