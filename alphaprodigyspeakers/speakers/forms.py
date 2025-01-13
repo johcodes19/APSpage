@@ -1,5 +1,5 @@
 from django import forms
-from .models import Booking,Review, Service
+from .models import Booking,Review, Service, Profile
 from django.contrib.auth.forms import AuthenticationForm
 
 class BookingForm(forms.ModelForm):
@@ -20,18 +20,22 @@ class BookingForm(forms.ModelForm):
 
     date = forms.DateField(
         widget=forms.DateInput(attrs={'type': 'date'}),
-        input_formats=DATE_INPUT_FORMATS
+        input_formats=DATE_INPUT_FORMATS,
+        error_messages={'required': 'Please select a date for the booking.'}
     )
-    time = forms.ChoiceField(choices=TIME_SLOTS)
+    time = forms.ChoiceField(choices=TIME_SLOTS, error_messages={'required': 'Please select a time slot for the booking.'})
 
     class Meta:
         model = Booking
         fields = ['date', 'time']
-
-class ReviewForm(forms.ModelForm):
-    class Meta:
-        model = Review
-        fields = ['rating', 'comment']
+        error_messages = {
+            'date': {
+                'invalid': 'Enter a valid date in YYYY-MM-DD format.'
+            },
+            'time': {
+                'invalid_choice': 'Select a valid time slot.'
+            }
+        }
 
 
 class CustomAuthenticationForm(AuthenticationForm):
@@ -43,3 +47,13 @@ class CustomAuthenticationForm(AuthenticationForm):
         label='Password',
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'})
     )
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['avatar', 'preferences']
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['rating', 'comment']

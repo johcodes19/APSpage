@@ -200,16 +200,36 @@ input[type="submit"]:hover, button[type="submit"]:hover {
     transform: scale(1.05); /* Slightly larger on hover */
 }
 
-/* Responsive Styling */
+/* Responsive Styling Enhancements */
+@media (max-width: 1200px) {
+    /* Add styling adjustments for large screens here */
+}
+
+@media (max-width: 992px) {
+    /* Add styling adjustments for medium screens here */
+}
+
 @media (max-width: 768px) {
-    .service-box {
-        width: calc(50% - 20px); /* 2 boxes per row on medium screens */
+    /* Add styling adjustments for small screens here */
+    nav ul li {
+        display: block;
+        text-align: center;
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 576px) {
+    /* Add styling adjustments for extra-small screens here */
+    main {
+        padding: 10px;
+    }
+
+    .service-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
     .service-box {
-        width: calc(100% - 20px); /* 1 box per row on small screens */
+        width: calc(100% - 20px);
     }
 }
 

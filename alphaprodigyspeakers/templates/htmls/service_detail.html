@@ -5,34 +5,30 @@
 {% endblock %}
 
 {% block content %}
-<section id="service_detail">
+<section id="service-detail">
     <h2>{{ service.name }}</h2>
     <p>{{ service.description }}</p>
     <p>Price: {{ service.price }} USD</p>
 
-    {% if user.is_authenticated %}
-        <a href="{% url 'booking' service.id %}" class="btn">Book Now</a>
-    {% else %}
-        <p><a href="{% url 'login' %}">Log in</a> to book this service.</p>
-    {% endif %}
-
     <h3>Reviews</h3>
-    {% for review in reviews %}
-        <div class="review">
-            <p><strong>{{ review.user.username }}</strong>: {{ review.rating }} stars</p>
-            <p>{{ review.comment }}</p>
-        </div>
-    {% endfor %}
-
-    {% if has_booked %}
-        <h3>Leave a Review</h3>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn">Submit Review</button>
-        </form>
+    {% if reviews %}
+        <ul>
+            {% for review in reviews %}
+                <li>
+                    <strong>{{ review.user.username }}</strong> rated it {{ review.rating }} stars
+                    <p>{{ review.comment }}</p>
+                </li>
+            {% endfor %}
+        </ul>
     {% else %}
-        <p>You need to book this service before you can leave a review.</p>
+        <p>No reviews yet. Be the first to review this service!</p>
     {% endif %}
+
+    <h3>Leave a Review</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Submit Review</button>
+    </form>
 </section>
 {% endblock %}

@@ -3,38 +3,48 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .models import Service, Booking, Order, Review
-from .forms import BookingForm, ReviewForm
+from .forms import BookingForm, ProfileForm
 import paypalrestsdk
 from django.conf import settings
 from django.urls import reverse
 from .utils import send_booking_confirmation_email
 from django.db.models import Q
+from django.core.paginator import Paginator
+from django.http import JsonResponse
+from django.core.mail import send_mail
+from .models import FAQ
 
 def home_view(request):
     return render(request, 'home.html')  # Updated path
 
 def service_list_view(request):
     services = Service.objects.all()
-    return render(request, 'service_list.html', {'services': services})
+    paginator = Paginator(services, 10)  # Show 10 services per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'service_list.html', {'page_obj': page_obj})
+
+from django.shortcuts import render, get_object_or_404
+
+from .forms import ReviewForm
+from .models import Review
 
 def service_detail_view(request, service_id):
-    service = Service.objects.get(id=service_id)
+    service = get_object_or_404(Service, id=service_id)
     reviews = Review.objects.filter(service=service)
-    if request.user.is_authenticated:
-        has_booked = Booking.objects.filter(user=request.user, service=service).exists()
-    else:
-        has_booked = False
-    if request.method == 'POST' and has_booked:
+    if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
             review = form.save(commit=False)
-            review.user = request.user
             review.service = service
+            review.user = request.user
             review.save()
             return redirect('service_detail', service_id=service.id)
     else:
         form = ReviewForm()
-    return render(request, 'service_detail.html', {'service': service, 'reviews': reviews, 'form': form, 'has_booked': has_booked})
+
+    return render(request, 'service_detail.html', {'service': service, 'reviews': reviews, 'form': form})
+
 
 def booking_view(request, service_id):
     service = Service.objects.get(id=service_id)
@@ -45,6 +55,13 @@ def booking_view(request, service_id):
             booking.user = request.user
             booking.service = service
             booking.save()
+            send_mail(
+                'Booking Confirmation',
+                f'Thank you for booking {service.name}. Your booking is confirmed for {booking.date} at {booking.time}.',
+                'annetdaisymm@gmail.com',
+                [request.user.email],
+                fail_silently=False,
+            )
             return redirect('payment', booking_id=booking.id)
     else:
         form = BookingForm()
@@ -67,10 +84,14 @@ def register_view(request):
 
 @login_required 
 def profile_view(request):
-    if not request.user.is_authenticated:
-        return redirect('login')
-    bookings = Booking.objects.filter(user=request.user)
-    return render(request, 'profile.html', {'bookings': bookings})
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = ProfileForm(instance=request.user.profile)
+    return render(request, 'profile.html', {'form': form})
 
 
 def order_summary_view(request, booking_id):
@@ -82,7 +103,7 @@ def order_summary_view(request, booking_id):
 reverse
 
 paypalrestsdk.configure({
-    "mode": "sandbox",  # Use "live" for production
+    "mode": "live",  # Use "live" for production
     "client_id": settings.PAYPAL_CLIENT_ID,
     "client_secret": settings.PAYPAL_CLIENT_SECRET
 })
@@ -137,3 +158,23 @@ def search_view(request):
     if query:
         results = Service.objects.filter(name__icontains=query)  # Filter services by name containing the query
     return render(request, 'search_results.html', {'query': query, 'results': results})
+
+
+def search_suggestions_view(request):
+    query = request.GET.get('q')
+    results = []
+    if query:
+        results = Service.objects.filter(name__icontains=query).values_list('name', flat=True)
+    return JsonResponse({'results': list(results)})
+
+def send_booking_confirmation(user, booking):
+    subject = 'Booking Confirmation'
+    message = f'Dear {user.username},\n\nThank you for booking {booking.service.name}. Your booking is confirmed for {booking.date} at {booking.time}.\n\nBest regards,\nAlpha Prodigy Speakers'
+    from_email = 'your-email@example.com'
+    recipient_list = [user.email]
+    send_mail(subject, message, from_email, recipient_list)
+
+
+def faq_view(request):
+    faqs = FAQ.objects.all()
+    return render(request, 'faq.html', {'faqs': faqs})

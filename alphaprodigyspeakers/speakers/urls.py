@@ -17,4 +17,6 @@ urlpatterns = [
     path('payment/cancelled/', views.payment_cancelled, name='payment_cancelled'),
     path('order_summary/<int:booking_id>/', views.order_summary_view, name='order_summary'),
     path('search/', views.search_view, name='search'),
+    path('search_suggestions/', views.search_suggestions_view, name='search_suggestions'),
+    path('faq/', views.faq_view, name='faq'),
 ]

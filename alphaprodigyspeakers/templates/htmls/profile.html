@@ -10,13 +10,12 @@
 
 {% block content %}
 <section id="profile">
-    <h2>Welcome, {{ user.username }}</h2>
-    <p>Email: {{ user.email }}</p>
-    <h3>Your Bookings</h3>
-    <ul>
-        {% for booking in bookings %}
-        <li>{{ booking.service.name }} on {{ booking.date }}</li>
-        {% endfor %}
-    </ul>
+    <h2>Your Profile</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Update Profile</button>
+    </form>
 </section>
 {% endblock %}
+

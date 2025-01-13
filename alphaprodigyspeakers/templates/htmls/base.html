@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Alpha Prodigy Speakers{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <script src="{% static 'scripts.js' %}" defer></script>
 </head>
 
 <body>
@@ -15,6 +16,7 @@
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="{% url 'service_list' %}">Services</a></li>
                 <li><a href="{% url 'profile' %}">Profile</a></li>
+                <li><a href="{% url 'faq' %}">FAQ</a></li>
                 {% if user.is_authenticated %}
                     <li>
                         <form action="{% url 'logout' %}" method="post" style="display: inline;">
@@ -32,10 +34,12 @@
                 Alpha Prodigy Speakers
             {% endblock %}
         </h1>
+        <button id="dark-mode-toggle" class="btn">Toggle Dark Mode</button>
     </header>
 
     <form method="get" action="{% url 'search' %}">
         <input type="text" name="q" placeholder="Search services...">
+        <div class="suggestions"></div>
         <button type="submit" class="btn">Search</button>
     </form>
 
