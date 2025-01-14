@@ -253,3 +253,24 @@ p, h1, h2, h3, a {
 header p, header h1, header h2, header h3, footer p, footer h1, footer h2, footer h3 {
     color: white; /* Ensure text in header and footer is white */
 }
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+header.dark-mode, footer.dark-mode {
+    background-color: #1f1f1f;
+    color: #e0e0e0;
+}
+
+nav.dark-mode ul li a {
+    color: #e0e0e0;
+}
+
+nav.dark-mode ul li a:hover {
+    color: #c0c0c0;
+}
+
+/* Additional Dark Mode Styles for other elements */

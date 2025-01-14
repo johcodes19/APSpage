@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from .models import Service, Booking, Order, Review
-from .forms import BookingForm, ProfileForm
+from .models import Service, Booking, Order, Review, Profile, User
+from .forms import BookingForm, ProfileForm, ReviewForm
 import paypalrestsdk
 from django.conf import settings
 from django.urls import reverse
@@ -13,6 +13,7 @@ from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.core.mail import send_mail
 from .models import FAQ
+from django.shortcuts import render, get_object_or_404
 
 def home_view(request):
     return render(request, 'home.html')  # Updated path
@@ -24,10 +25,6 @@ def service_list_view(request):
     page_obj = paginator.get_page(page_number)
     return render(request, 'service_list.html', {'page_obj': page_obj})
 
-from django.shortcuts import render, get_object_or_404
-
-from .forms import ReviewForm
-from .models import Review
 
 def service_detail_view(request, service_id):
     service = get_object_or_404(Service, id=service_id)
@@ -84,14 +81,15 @@ def register_view(request):
 
 @login_required 
 def profile_view(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
     if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
             return redirect('profile')
     else:
-        form = ProfileForm(instance=request.user.profile)
-    return render(request, 'profile.html', {'form': form})
+        form = ProfileForm(instance=profile)
+    return render(request, 'profile.html', {'form': form, 'profile': profile})
 
 
 def order_summary_view(request, booking_id):

@@ -1,19 +1,22 @@
 {% extends 'base.html' %}
 
-{% block title %}
-    Frequently Asked Questions
-{% endblock %}
+{% block title %}FAQ{% endblock %}
 
 {% block content %}
 <section id="faq">
     <h2>Frequently Asked Questions</h2>
-    <ul>
-        {% for faq in faqs %}
-            <li>
-                <strong>{{ faq.question }}</strong>
-                <p>{{ faq.answer }}</p>
-            </li>
-        {% endfor %}
-    </ul>
+    <div>
+        <h3>How do I book a service?</h3>
+        <p>You can book a service by navigating to the service page and clicking the "Book Now" button.</p>
+
+        <h3>What payment methods are accepted?</h3>
+        <p>We accept PayPal and all major credit cards.</p>
+
+        <h3>Can I cancel a booking?</h3>
+        <p>You can cancel a booking by contacting our support team at least 24 hours before the event.</p>
+
+        <h3>How do I leave a review?</h3>
+        <p>To leave a review, log in to your account, navigate to the service page, and submit your review using the form provided.</p>
+    </div>
 </section>
 {% endblock %}
