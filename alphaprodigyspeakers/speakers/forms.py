@@ -51,7 +51,7 @@ class CustomAuthenticationForm(AuthenticationForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['avatar', 'preferences']
+        fields = ['avatar', 'bio']
 
 class ReviewForm(forms.ModelForm):
     class Meta:
