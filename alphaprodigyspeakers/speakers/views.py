@@ -14,6 +14,7 @@ from django.http import JsonResponse
 from django.core.mail import send_mail
 from .models import FAQ
 from django.shortcuts import render, get_object_or_404
+import logging
 
 def home_view(request):
     return render(request, 'home.html')  # Updated path
@@ -79,14 +80,21 @@ def register_view(request):
         form = UserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
 
+# Set up logging
+logger = logging.getLogger(__name__)
+
 @login_required 
 def profile_view(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
+    logger.info("Profile fetched or created: %s", profile)
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
+            logger.info("Profile form is valid and saved")
             return redirect('profile')
+        else:
+            logger.warning("Profile form is not valid: %s", form.errors)
     else:
         form = ProfileForm(instance=profile)
     return render(request, 'profile.html', {'form': form, 'profile': profile})

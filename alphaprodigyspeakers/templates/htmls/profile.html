@@ -1,11 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Profile - Alpha Prodigy Speakers
-{% endblock %}
-
-{% block header %}
-    Your Profile
+    Profile
 {% endblock %}
 
 {% block content %}
@@ -16,6 +12,20 @@
         {{ form.as_p }}
         <button type="submit" class="btn">Update Profile</button>
     </form>
+    {% if form.errors %}
+        <div class="errorlist">
+            <ul>
+                {% for field, errors in form.errors.items %}
+                    <li>{{ field }}: 
+                        <ul>
+                            {% for error in errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
 </section>
 {% endblock %}
-
