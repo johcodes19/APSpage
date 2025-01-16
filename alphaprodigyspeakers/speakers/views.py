@@ -20,7 +20,7 @@ def home_view(request):
     return render(request, 'home.html')  # Updated path
 
 def service_list_view(request):
-    services = Service.objects.all()
+    services = Service.objects.all().order_by('name')
     paginator = Paginator(services, 10)  # Show 10 services per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)

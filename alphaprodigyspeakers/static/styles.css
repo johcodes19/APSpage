@@ -56,6 +56,88 @@ main {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     max-width: 900px;
 }
+/* Service List Styling */
+#services {
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#services h2 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#services ul {
+    list-style: none;
+    padding: 0;
+}
+
+#services ul li {
+    margin: 10px 0;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+#services ul li:hover {
+    transform: scale(1.02);
+    border-color: skyblue;
+}
+
+#services ul li a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+#services ul li a:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+
+/* Pagination Styling */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination .step-links {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+}
+
+.pagination .step-links a {
+    margin: 0 5px;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    background-color: #f8f8f8;
+    color: #333;
+    text-decoration: none;
+    border-radius: 3px;
+}
+
+.pagination .step-links a:hover {
+    background-color: #e0e0e0;
+}
+
+.pagination .step-links .current {
+    margin: 0 5px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 3px;
+    font-weight: bold;
+}
+
 
 /* Booking Box Styling */
 #profile ul {
