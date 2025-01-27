@@ -1,13 +1,57 @@
 {% extends 'base.html' %}
 
-{% block title %}
-Home - Alpha Prodigy Speakers{% endblock %}
-
-{% block header %}Alpha Prodigy Speakers{% endblock %}
+{% block title %}Welcome to Alpha Prodigy Speakers{% endblock %}
 
 {% block content %}
-<section id="home">
-    <h2>Welcome to Alpha Prodigy Speakers</h2>
-    <p>Your success in public speaking starts here. We provide executive training to help you deliver powerful and persuasive presentations.</p>
+<section id="hero" class="hero-section">
+    <div class="hero-content">
+        <h1>Alpha Prodigy Speakers</h1>
+        <p>Your Premier Destination for Inspiring Keynote Speakers and Professional Public Speaking Services</p>
+        <a href="{% url 'service_list' %}" class="btn">Explore Our Services</a>
+    </div>
+</section>
+
+<section id="about-us" class="content-section">
+    <h2>About Us</h2>
+    <p>Welcome to Alpha Prodigy Speakers, the premier destination for unparalleled keynote speakers, inspiring motivational sessions, and professional public speaking services. Our team of accomplished speakers brings a wealth of experience and expertise to deliver impactful presentations that leave a lasting impression.</p>
+
+    <h3>Our Mission</h3>
+    <p>At Alpha Prodigy Speakers, our mission is to empower individuals and organizations by delivering transformative and engaging speaking experiences. We are committed to providing exceptional service and ensuring that every event is a memorable success.</p>
+</section>
+
+<section id="services" class="content-section">
+    <h2>What We Offer</h2>
+    <ul>
+        <li><strong>Keynote Speaking:</strong> Captivating speeches that inspire and motivate audiences.</li>
+        <li><strong>Motivational Speaking:</strong> Uplifting talks that encourage personal and professional growth.</li>
+        <li><strong>Corporate Training:</strong> Customized training sessions to enhance team performance and productivity.</li>
+        <li><strong>Workshops & Seminars:</strong> Interactive workshops and seminars on a wide range of topics.</li>
+    </ul>
+</section>
+
+<section id="why-choose-us" class="content-section">
+    <h2>Why Choose Us?</h2>
+    <p>Our speakers are industry leaders, thought influencers, and expert communicators who bring passion and insight to every presentation. We work closely with our clients to understand their unique needs and tailor our services to exceed their expectations.</p>
+    <ul>
+        <li><strong>Experienced Speakers:</strong> Proven track record of successful engagements across various industries.</li>
+        <li><strong>Customized Solutions:</strong> Tailored content to meet the specific needs of your event and audience.</li>
+        <li><strong>Engaging Presentations:</strong> Dynamic and interactive presentations that captivate and inspire.</li>
+        <li><strong>Customer Satisfaction:</strong> Commitment to delivering exceptional service and client satisfaction.</li>
+    </ul>
+</section>
+
+<section id="meet-our-team" class="content-section">
+    <h2>Meet Our Team</h2>
+    <p>Our team of speakers includes renowned experts, industry leaders, and motivational icons who are dedicated to making a positive impact. Each speaker brings a unique perspective and a wealth of knowledge to every event.</p>
+</section>
+
+<section id="contact-us" class="content-section">
+    <h2>Contact Us</h2>
+    <p>Ready to elevate your next event with the power of Alpha Prodigy Speakers? Contact us today to learn more about our services and how we can help you achieve your goals.</p>
+    <ul>
+        <li><strong>Email:</strong> <a href="mailto:annetdaisymm@gmail.com">info@alphaprodigyspeakers.com</a></li>
+        <li><strong>Phone:</strong> <a href="tel:+254114591001">Phone Number</a></li>
+        <li><strong>Address:</strong> Alpha Prodigy Speakers, Nairobi, Kenya</li>
+    </ul>
 </section>
 {% endblock %}
