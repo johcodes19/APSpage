@@ -139,9 +139,9 @@ PAYPAL_SECRET = os.getenv('PAYPAL_SECRET')
 PAYPAL_MODE = os.getenv('PAYPAL_MODE', 'live')  # Set to 'live' for production
 
 # Debugging lines to verify loading (Remove these lines in production)
-print(f"PayPal Client ID: {PAYPAL_CLIENT_ID}")  
-print(f"PayPal Secret: {PAYPAL_SECRET}")  
-print(f"PayPal Mode: {PAYPAL_MODE}")  
+#print(f"PayPal Client ID: {PAYPAL_CLIENT_ID}")  
+#print(f"PayPal Secret: {PAYPAL_SECRET}")  
+#print(f"PayPal Mode: {PAYPAL_MODE}")  
 
 # email notification notification
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
