@@ -17,9 +17,13 @@ class Service(models.Model):
 class Booking(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
-    date = models.DateTimeField()
-    booked_on = models.DateTimeField(auto_now_add=True)
-    special_requests = models.TextField(blank=True, null=True)  # Optional field for special requests
+    date = models.DateField()
+    time = models.TimeField()  # Ensure this field is present
+    booked_on = models.DateTimeField(auto_now_add=True) # Add this attribute
+    is_paid = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'Booking for {self.service.name} by {self.user.username}'
 
 class Order(models.Model):
     booking = models.OneToOneField(Booking, on_delete=models.CASCADE)

@@ -26,22 +26,27 @@ def service_list_view(request):
     page_obj = paginator.get_page(page_number)
     return render(request, 'service_list.html', {'page_obj': page_obj})
 
-
 def service_detail_view(request, service_id):
     service = get_object_or_404(Service, id=service_id)
-    reviews = Review.objects.filter(service=service)
     if request.method == 'POST':
-        form = ReviewForm(request.POST)
+        form = BookingForm(request.POST)
         if form.is_valid():
-            review = form.save(commit=False)
-            review.service = service
-            review.user = request.user
-            review.save()
-            return redirect('service_detail', service_id=service.id)
+            booking = form.save(commit=False)
+            booking.user = request.user
+            booking.service = service
+            booking.save()
+            send_mail(
+                'Booking Confirmation',
+                f'Thank you for booking {service.name}. Your booking is confirmed for {booking.date} at {booking.time}.',
+                'annetdaisymm@gmail.com',
+                [request.user.email],
+                fail_silently=False,
+            )
+            return redirect('payment', booking_id=booking.id)
     else:
-        form = ReviewForm()
+        form = BookingForm()
 
-    return render(request, 'service_detail.html', {'service': service, 'reviews': reviews, 'form': form})
+    return render(request, 'service_detail.html', {'service': service, 'form': form})
 
 
 def booking_view(request, service_id):
@@ -109,13 +114,13 @@ def order_summary_view(request, booking_id):
 reverse
 
 paypalrestsdk.configure({
-    "mode": "live",  # Use "live" for production
+    "mode": settings.PAYPAL_MODE,
     "client_id": settings.PAYPAL_CLIENT_ID,
-    "client_secret": settings.PAYPAL_CLIENT_SECRET
+    "client_secret": settings.PAYPAL_SECRET,
 })
 
 def payment_view(request, booking_id):
-    booking = Booking.objects.get(id=booking_id)
+    booking = get_object_or_404(Booking, id=booking_id)
     if request.method == 'POST':
         payment = paypalrestsdk.Payment({
             "intent": "sale",
@@ -144,6 +149,7 @@ def payment_view(request, booking_id):
         else:
             return render(request, 'payment_error.html', {"error": payment.error})
     return render(request, 'payment.html', {'booking': booking})
+
 
 
 def payment_success(request, booking_id):

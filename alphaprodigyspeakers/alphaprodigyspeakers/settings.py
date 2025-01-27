@@ -129,8 +129,11 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # paypal developer details
-PAYPAL_CLIENT_ID = 'AX9u84li5YdH03GjXBFrZ8Uz0wcDOAgLPCq_f5k6wfMFemnU-t_UYWP7PiMz_o2aYMiLaIngv-ountDS'
-PAYPAL_CLIENT_SECRET = 'EL_wyBp3wg1oTaA2VQi4uBq4CBGGP3TRlrLJiBoZG2gIs98mJp0M2mWE6iwNbstj8hxXPW6m5-FHvgv6'
+import os
+
+PAYPAL_CLIENT_ID = os.getenv('AZ2lGfOouJczp2sWe1sU9ZhihALnvErgIjC2uQCw4lheLRJwG0FVPqj-WjMElOzl4uu1kZQsBQkIkGgH')
+PAYPAL_SECRET = os.getenv('EJS6XC80c5huC3RWkMyareTwAj2abMshm-AJvxMvrN3cdmg22P8VaJ3HVv913SX6NpyzObMSbgq3CbKU')
+PAYPAL_MODE = os.getenv('PAYPAL_MODE', 'live')  # Set to 'live' for production
 
 
 # email notification notification
