@@ -153,10 +153,21 @@ def payment_view(request, booking_id):
 
 
 def payment_success(request, booking_id):
-    booking = Booking.objects.get(id=booking_id)
-    booking.is_paid = True
+    booking = get_object_or_404(Booking, id=booking_id)
+    booking.status = 'Paid'
     booking.save()
+    
+    # Send confirmation email
+    send_mail(
+        'Booking Confirmation',
+        f'Thank you for your booking! Your payment for {booking.service.name} has been successfully received.',
+        'info@alphaprodigyspeakers.com',
+        [booking.user.email],
+        fail_silently=False,
+    )
+    
     return render(request, 'payment_success.html', {'booking': booking})
+
 
 def payment_cancelled(request):
     return render(request, 'payment_cancelled.html')
