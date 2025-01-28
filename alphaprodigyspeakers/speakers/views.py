@@ -141,6 +141,7 @@ def payment_view(request, booking_id):
                     "total": str(booking.service.price),
                     "currency": "USD"},
                 "description": f"Payment for {booking.service.name}"}]})
+
         if payment.create():
             for link in payment.links:
                 if link.rel == "approval_url":
@@ -148,9 +149,8 @@ def payment_view(request, booking_id):
                     return redirect(redirect_url)
         else:
             return render(request, 'payment_error.html', {"error": payment.error})
-    return render(request, 'payment.html', {'booking': booking})
-
-
+    else:
+        return render(request, 'payment.html', {'booking': booking})
 
 def payment_success(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
