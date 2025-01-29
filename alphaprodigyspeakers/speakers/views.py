@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .models import Service, Booking, Order, Review, Profile, User
 from .forms import BookingForm, ProfileForm, ReviewForm
+from django.contrib import messages
 import paypalrestsdk
 from django.conf import settings
 from django.urls import reverse
@@ -88,18 +89,17 @@ def register_view(request):
 # Set up logging
 logger = logging.getLogger(__name__)
 
-@login_required 
+@login_required
 def profile_view(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
-    logger.info("Profile fetched or created: %s", profile)
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            logger.info("Profile form is valid and saved")
+            messages.success(request, 'Your profile has been updated successfully!')
             return redirect('profile')
         else:
-            logger.warning("Profile form is not valid: %s", form.errors)
+            messages.error(request, 'Please correct the errors below.')
     else:
         form = ProfileForm(instance=profile)
     return render(request, 'profile.html', {'form': form, 'profile': profile})
@@ -151,6 +151,7 @@ def payment_view(request, booking_id):
             return render(request, 'payment_error.html', {"error": payment.error})
     else:
         return render(request, 'payment.html', {'booking': booking})
+
 
 def payment_success(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)

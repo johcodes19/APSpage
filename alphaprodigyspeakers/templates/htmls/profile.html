@@ -4,14 +4,25 @@
     Profile
 {% endblock %}
 
+{% block header %}
+    Profile
+{% endblock %}
+
 {% block content %}
-<section id="profile">
+<section id="profile" class="content-section">
     <h2>Your Profile</h2>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn">Update Profile</button>
     </form>
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
     {% if form.errors %}
         <div class="errorlist">
             <ul>
