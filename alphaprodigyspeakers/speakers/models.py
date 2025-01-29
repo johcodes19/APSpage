@@ -19,17 +19,19 @@ class Booking(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
     date = models.DateField()
     time = models.TimeField()  # Ensure this field is present
-    booked_on = models.DateTimeField(auto_now_add=True) # Add this attribute
+    booked_on = models.DateTimeField(auto_now_add=True)  # Add this attribute
     is_paid = models.BooleanField(default=False)
 
     def __str__(self):
         return f'Booking for {self.service.name} by {self.user.username}'
+
 
 class Order(models.Model):
     booking = models.OneToOneField(Booking, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     is_paid = models.BooleanField(default=False)
     payment_method = models.CharField(max_length=50, blank=True, null=True)  # Track payment method
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -38,6 +40,7 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+
 
 class Review(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
@@ -48,6 +51,7 @@ class Review(models.Model):
 
     def __str__(self):
         return f'{self.service.name} - {self.user.username}'
+
 
 class FAQ(models.Model):
     question = models.CharField(max_length=255)

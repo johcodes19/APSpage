@@ -92,6 +92,7 @@ logger = logging.getLogger(__name__)
 @login_required
 def profile_view(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
+    bookings = Booking.objects.filter(user=request.user)
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
@@ -102,7 +103,7 @@ def profile_view(request):
             messages.error(request, 'Please correct the errors below.')
     else:
         form = ProfileForm(instance=profile)
-    return render(request, 'profile.html', {'form': form, 'profile': profile})
+    return render(request, 'profile.html', {'form': form, 'profile': profile, 'bookings': bookings})
 
 
 def order_summary_view(request, booking_id):

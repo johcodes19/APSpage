@@ -2,6 +2,8 @@ from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
 from .forms import CustomAuthenticationForm
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.home_view, name='home'),
@@ -19,4 +21,4 @@ urlpatterns = [
     path('search/', views.search_view, name='search'),
     path('search_suggestions/', views.search_suggestions_view, name='search_suggestions'),
     path('faq/', views.faq_view, name='faq'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
