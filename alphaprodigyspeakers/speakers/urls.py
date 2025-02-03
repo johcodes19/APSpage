@@ -22,4 +22,5 @@ urlpatterns = [
     path('search_suggestions/', views.search_suggestions_view, name='search_suggestions'),
     path('faq/', views.faq_view, name='faq'),
     path('booking/', views.create_booking, name='create_booking'),
+    path('check_availability/', views.check_availability, name='check_availability'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -8,15 +8,45 @@
 <section id="service-detail">
     <h2>{{ service.name }}</h2>
     <p>{{ service.description }}</p>
-    <p>Price: {{ service.price }} USD</p>
-
+    <p>Price: <span class="price">{{ service.price }} USD</span></p>
 
     <h3>Book This Service</h3>
-    <form method="post">
+    <form method="post" class="booking-form">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn">Book Now</button>
-    </form>
 
+
+        <button type="submit" class="btn">Book Now</button>
+
+        <div class="alert-box" id="alert-box">
+            This slot is taken.
+        </div>
+    </form>
 </section>
+
+<script>
+    document.getElementById('date').setAttribute('min', new Date().toISOString().split('T')[0]);
+
+    function checkSlotAvailability(event) {
+        event.preventDefault();  // Prevent form submission for demonstration
+
+        var selectedDate = document.getElementById('date').value;
+        var selectedTime = document.getElementById('time').value;
+        var selectedTimezone = document.getElementById('timezone').value;
+
+        fetch(`/check_availability/?date=${selectedDate}&time=${selectedTime}&timezone=${selectedTimezone}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.slot_taken) {
+                    document.getElementById('alert-box').style.display = 'block';
+                } else {
+                    document.getElementById('alert-box').style.display = 'none';
+                    // Proceed with form submission
+                    event.target.submit();
+                }
+            });
+    }
+
+    document.querySelector('.booking-form').addEventListener('submit', checkSlotAvailability);
+</script>
 {% endblock %}

@@ -261,3 +261,15 @@ def add_event_to_google_calendar(booking):
 # Call this function after a booking is successfully created
 #add_event_to_google_calendar(booking)
 
+from django.http import JsonResponse
+from .models import Booking
+
+def check_availability(request):
+    date = request.GET.get('date')
+    time = request.GET.get('time')
+    timezone = request.GET.get('timezone')
+    
+    # Check if there is any booking with the same date, time, and timezone
+    slot_taken = Booking.objects.filter(date=date, time=time, timezone=timezone).exists()
+    
+    return JsonResponse({'slot_taken': slot_taken})

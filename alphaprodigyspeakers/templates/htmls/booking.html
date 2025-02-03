@@ -1,18 +1,19 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Book Service
+    {{ service.name }}
 {% endblock %}
 
 {% block content %}
-<section id="booking">
-    <h2>Create a Booking for {{ service.name }}</h2>
-    <p>Have me speak at your event for <span class="price">{{ service.price }} USD</span></p>
+<section id="service-detail">
+    <h2>{{ service.name }}</h2>
+    <p>{{ service.description }}</p>
+    <p>Price: <span class="price">{{ service.price }} USD</span></p>
 
+    <h3>Book This Service</h3>
     <form method="post" class="booking-form">
         {% csrf_token %}
         {{ form.as_p }}
-        
         <label for="date">Date:</label>
         <input type="date" id="date" name="date" required>
 
@@ -38,20 +39,28 @@
     document.getElementById('id_date').setAttribute('min', new Date().toISOString().split('T')[0]);
 
     function checkSlotAvailability() {
-        // Logic to check if the slot is taken
-        var slotTaken = true; // Example condition
+        // Fetch the selected date, time, and timezone
+        var selectedDate = document.getElementById('date').value;
+        var selectedTime = document.getElementById('time').value;
+        var selectedTimezone = document.getElementById('timezone').value;
         
-        if (slotTaken) {
-            document.getElementById('alert-box').style.display = 'block';
-        } else {
-            document.getElementById('alert-box').style.display = 'none';
-            // Proceed with booking
-        }
+        // Call the server to check if the slot is taken
+        fetch(`/check_availability/?date=${selectedDate}&time=${selectedTime}&timezone=${selectedTimezone}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.slot_taken) {
+                    document.getElementById('alert-box').style.display = 'block';
+                } else {
+                    document.getElementById('alert-box').style.display = 'none';
+                    // Submit the form if the slot is available
+                    document.querySelector('.booking-form').submit();
+                }
+            });
     }
     
     document.querySelector('.booking-form').addEventListener('submit', function(event) {
         checkSlotAvailability();
-        event.preventDefault(); // Prevent form submission for demonstration
+        event.preventDefault(); // Prevent form submission until availability is checked
     });
 </script>
 {% endblock %}
