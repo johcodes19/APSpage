@@ -99,6 +99,9 @@ def profile_view(request):
             messages.error(request, 'Please correct the errors below.')
     else:
         form = ProfileForm(instance=profile)
+        
+    print(profile.avatar.url if profile.avatar else "No avatar")  # Debug statement
+
     return render(request, 'profile.html', {'form': form, 'profile': profile, 'bookings': bookings})
 
 @login_required
