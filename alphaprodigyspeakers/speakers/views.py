@@ -152,27 +152,40 @@ def payment_view(request, booking_id):
             return render(request, 'payment_error.html', {"error": payment.error})
     else:
         return render(request, 'payment.html', {'booking': booking})
-
+    
 
 def payment_success(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
-    booking.status = 'Paid'
-    booking.save()
-    
-    # Send confirmation email
-    send_mail(
-        'Booking Confirmation',
-        f'Thank you for your booking! Your payment for {booking.service.name} has been successfully received.',
-        'info@alphaprodigyspeakers.com',
-        [booking.user.email],
-        fail_silently=False,
-    )
-    
-    return render(request, 'payment_success.html', {'booking': booking})
-
+    if 'paymentId' in request.GET and 'PayerID' in request.GET:
+        payment_id = request.GET['paymentId']
+        payer_id = request.GET['PayerID']
+        payment = paypalrestsdk.Payment.find(payment_id)
+        
+        if payment.execute({"payer_id": payer_id}):
+            booking.status = 'Paid'
+            booking.is_paid = True
+            booking.save()
+            
+            # Send confirmation email
+            send_booking_confirmation(booking.user, booking)
+            send_admin_notification(booking)
+            
+            return render(request, 'payment_success.html', {'booking': booking})
+        else:
+            booking.status = 'Payment Failed'
+            booking.save()
+            return render(request, 'payment_error.html', {"error": "Payment failed."})
+    return render(request, 'payment_error.html', {"error": "Payment details not found."})
 
 def payment_cancelled(request):
     return render(request, 'payment_cancelled.html')
+
+def send_booking_confirmation(user, booking):
+    subject = 'Booking Confirmation'
+    message = f'Dear {user.username},\n\nThank you for booking {booking.service.name}. Your booking is confirmed for {booking.date} at {booking.time} (UTC+3).\n\nBest regards,\nAlpha Prodigy Speakers'
+    from_email = 'annetdaisymm@gmail.com'
+    recipient_list = [user.email]
+    send_mail(subject, message, from_email, recipient_list)
 
 from django.shortcuts import render
 from .models import Service
@@ -192,14 +205,78 @@ def search_suggestions_view(request):
         results = Service.objects.filter(name__icontains=query).values_list('name', flat=True)
     return JsonResponse({'results': list(results)})
 
-def send_booking_confirmation(user, booking):
-    subject = 'Booking Confirmation'
-    message = f'Dear {user.username},\n\nThank you for booking {booking.service.name}. Your booking is confirmed for {booking.date} at {booking.time}.\n\nBest regards,\nAlpha Prodigy Speakers'
-    from_email = 'your-email@example.com'
-    recipient_list = [user.email]
-    send_mail(subject, message, from_email, recipient_list)
-
-
 def faq_view(request):
     faqs = FAQ.objects.all()
     return render(request, 'faq.html', {'faqs': faqs})
+
+import os.path
+import google.oauth2.credentials
+import google_auth_oauthlib.flow
+import googleapiclient.discovery
+from datetime import timedelta
+from django.shortcuts import redirect
+
+def add_event_to_google_calendar(booking):
+    SCOPES = ['https://www.googleapis.com/auth/calendar']
+    flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
+        'path_to_client_secret.json', SCOPES)
+    credentials = flow.run_local_server(port=0)
+    service = googleapiclient.discovery.build('calendar', 'v3', credentials=credentials)
+    
+    event = {
+        'summary': f'Booking for {booking.service.name}',
+        'description': f'Booking by {booking.user.username}',
+        'start': {
+            'dateTime': booking.date.isoformat() + 'T' + booking.time,
+            'timeZone': 'Africa/Nairobi',
+        },
+        'end': {
+            'dateTime': (booking.date + timedelta(hours=1)).isoformat() + 'T' + booking.time,
+            'timeZone': 'Africa/Nairobi',
+        }
+    }
+    
+    event_result = service.events().insert(calendarId='primary', body=event).execute()
+    return event_result
+
+# Call this function after a booking is successfully created
+#add_event_to_google_calendar(booking)
+
+import pytz
+from datetime import datetime
+
+def create_booking(request):
+    if request.method == 'POST':
+        form = BookingForm(request.POST)
+        if form.is_valid():
+            booking = form.save(commit=False)
+            user_timezone = pytz.timezone(form.cleaned_data['timezone'])
+            nairobi_timezone = pytz.timezone('Africa/Nairobi')
+            
+            booking_time = datetime.combine(booking.date, booking.time)
+            booking_time = user_timezone.localize(booking_time).astimezone(nairobi_timezone)
+            
+            booking.date = booking_time.date()
+            booking.time = booking_time.time()
+            booking.save()
+            messages.success(request, 'Booking created successfully!')
+            send_booking_confirmation(request.user, booking)
+            add_event_to_google_calendar(booking)
+            return redirect('payment_view', booking_id=booking.id)
+    else:
+        form = BookingForm()
+    return render(request, 'booking_form.html', {'form': form})
+
+def send_booking_confirmation(user, booking):
+    subject = 'Booking Confirmation'
+    message = f'Dear {user.username},\n\nThank you for booking {booking.service.name}. Your booking is confirmed for {booking.date} at {booking.time} (UTC+3).\n\nBest regards,\nAlpha Prodigy Speakers'
+    from_email = 'annetdaisymm@gmail.com'
+    recipient_list = [user.email]
+    send_mail(subject, message, from_email, recipient_list)
+
+def send_admin_notification(booking):
+    subject = 'New Booking Received'
+    message = f'New booking for {booking.service.name} by {booking.user.username}\nDate: {booking.date}\nTime: {booking.time} (UTC+3)'
+    from_email = 'annetdaisymm@gmail.com'
+    recipient_list = ['annetdaisymm@gmail.com']
+    send_mail(subject, message, from_email, recipient_list)

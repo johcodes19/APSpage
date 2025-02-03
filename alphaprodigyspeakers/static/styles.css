@@ -6,6 +6,10 @@ body {
     padding: 0;
 }
 
+body {
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
 /* Header and Footer Styling */
 header, footer {
     background-color: navy; /* Navy color for headers and footers */
@@ -65,7 +69,7 @@ main {
     margin-bottom: 20px !important; /* Ensure margin-bottom is applied */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
-    width: 100%;
+    width: 95%;
     box-sizing: border-box;
 }
 
@@ -96,7 +100,7 @@ section {
     margin-top: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
-    width: 100%;
+    width: 98%;
     box-sizing: border-box;
 }
 
@@ -169,7 +173,7 @@ section {
 
 #services ul li a {
     text-decoration: none;
-    color: #007bff;
+    color: navy;
     font-weight: bold;
 }
 
@@ -209,7 +213,7 @@ section {
 .pagination .step-links .current {
     margin: 0 5px;
     padding: 10px 15px;
-    background-color: #007bff;
+    background-color: navy;
     color: #fff;
     border-radius: 3px;
     font-weight: bold;

@@ -16,7 +16,7 @@
         {% if profile.avatar %}
             <img src="{{ profile.avatar.url }}" alt="{{ profile.user.username }}'s avatar" class="avatar">
         {% else %}
-            <img src="{% static 'default_avatar.png' %}" alt="Default avatar" class="avatar"> <!-- Ensure you have a default avatar in your static files -->
+            <p>No avatar available</p>
         {% endif %}
         <p><strong>Username:</strong> {{ profile.user.username }}</p>
         <p><strong>Email:</strong> {{ profile.user.email }}</p>

@@ -6,8 +6,14 @@
 
 {% block content %}
 <section id="booking">
-    <h2>Book {{ service.name }}</h2>
+    <h2>Create a Booking {{ service.name }}</h2>
     <p>Have me speak at your event for {{ service.price }} USD</p>
+    <label for="date">Booking Date:</label>
+    <input type="date" id="date" name="date" required>
+    <script>
+        document.getElementById('date').setAttribute('min', new Date().toISOString().split('T')[0]);
+    </script>
+
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
