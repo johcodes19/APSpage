@@ -10,7 +10,6 @@
     <h2>Your Profile</h2>
     <div class="profile-info">
         {% if profile.avatar %}
-            <p>{{ profile.avatar.url }}</p> <!-- Debug statement -->
             <img src="{{ profile.avatar.url }}" alt="{{ profile.user.username }}'s avatar" class="avatar">
         {% else %}
             <img src="{% static 'images/default-avatar.png' %}" alt="Default avatar" class="avatar">
