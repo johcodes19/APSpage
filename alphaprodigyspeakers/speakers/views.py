@@ -101,6 +101,14 @@ def profile_view(request):
         form = ProfileForm(instance=profile)
     return render(request, 'profile.html', {'form': form, 'profile': profile, 'bookings': bookings})
 
+@login_required
+def delete_booking(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id, user=request.user)
+    if request.method == 'POST':
+        booking.delete()
+        messages.success(request, 'Booking has been deleted successfully.')
+    return redirect('profile')
+
 
 def order_summary_view(request, booking_id):
     booking = Booking.objects.get(id=booking_id)
