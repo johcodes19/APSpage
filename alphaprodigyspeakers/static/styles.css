@@ -498,6 +498,49 @@ nav.dark-mode ul li a:hover {
     }
 }
 
+/* Styling for the price */
+.price {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 10px;
+}
+
+/* Styling for the date, time, and timezone inputs */
+.booking-form input[type="date"],
+.booking-form input[type="time"],
+.booking-form select {
+    font-size: 16px;
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Styling for the alert box when the slot is taken */
+.alert-box {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 4px;
+    text-align: center;
+    display: none; /* Hide by default */
+}
+
+/* Styling for the timezone dropdown */
+.timezone-dropdown {
+    font-size: 16px;
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
 
 
 

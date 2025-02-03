@@ -7,16 +7,51 @@
 {% block content %}
 <section id="booking">
     <h2>Create a Booking for {{ service.name }}</h2>
-    <p>Have me speak at your event for {{ service.price }} USD</p>
+    <p>Have me speak at your event for <span class="price">{{ service.price }} USD</span></p>
 
-    <form method="post" action="{% url 'create_booking' %}">
+    <form method="post" class="booking-form">
         {% csrf_token %}
         {{ form.as_p }}
+        
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required>
+
+        <label for="time">Time:</label>
+        <input type="time" id="time" name="time" required>
+
+        <label for="timezone">Timezone:</label>
+        <select id="timezone" name="timezone" class="timezone-dropdown" required>
+            <option value="Africa/Dakar">Africa/Dakar</option>
+            <option value="Africa/Nairobi">Africa/Nairobi</option>
+            <!-- Add other timezones as needed -->
+        </select>
+
         <button type="submit" class="btn">Book Now</button>
+
+        <div class="alert-box" id="alert-box">
+            This slot is taken.
+        </div>
     </form>
 </section>
 
 <script>
     document.getElementById('id_date').setAttribute('min', new Date().toISOString().split('T')[0]);
+
+    function checkSlotAvailability() {
+        // Logic to check if the slot is taken
+        var slotTaken = true; // Example condition
+        
+        if (slotTaken) {
+            document.getElementById('alert-box').style.display = 'block';
+        } else {
+            document.getElementById('alert-box').style.display = 'none';
+            // Proceed with booking
+        }
+    }
+    
+    document.querySelector('.booking-form').addEventListener('submit', function(event) {
+        checkSlotAvailability();
+        event.preventDefault(); // Prevent form submission for demonstration
+    });
 </script>
 {% endblock %}
