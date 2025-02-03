@@ -46,13 +46,6 @@ def service_detail_view(request, service_id):
             booking.user = request.user
             booking.service = service
             booking.save()
-            send_mail(
-                'Booking Confirmation',
-                f'Thank you for booking {service.name}. Your booking is confirmed for {booking.date} at {booking.time}.',
-                'annetdaisymm@gmail.com',
-                [request.user.email],
-                fail_silently=False,
-            )
             return redirect('payment', booking_id=booking.id)
     else:
         form = BookingForm()
@@ -69,13 +62,6 @@ def booking_view(request, service_id):
             booking.user = request.user
             booking.service = service
             booking.save()
-            send_mail(
-                'Booking Confirmation',
-                f'Thank you for booking {service.name}. Your booking is confirmed for {booking.date} at {booking.time}.',
-                'annetdaisymm@gmail.com',
-                [request.user.email],
-                fail_silently=False,
-            )
             return redirect('payment', booking_id=booking.id)
     else:
         form = BookingForm()

@@ -132,16 +132,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 import os
 from dotenv import load_dotenv
 
-load_dotenv() # Take environment variables from .env.
+# Explicitly specify the path to the .env file
+dotenv_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../speakers.env')
+load_dotenv(dotenv_path)
 
-PAYPAL_CLIENT_ID = os.getenv('PAYPAL_CLIENT_ID')
-PAYPAL_SECRET = os.getenv('PAYPAL_SECRET')
+# Use os.environ as a fallback
+PAYPAL_CLIENT_ID = os.getenv('PAYPAL_CLIENT_ID') or os.environ.get('PAYPAL_CLIENT_ID')
+PAYPAL_SECRET = os.getenv('PAYPAL_SECRET') or os.environ.get('PAYPAL_SECRET')
 PAYPAL_MODE = os.getenv('PAYPAL_MODE', 'live')  # Set to 'live' for production
 
 # Debugging lines to verify loading (Remove these lines in production)
-#print(f"PayPal Client ID: {PAYPAL_CLIENT_ID}")  
-#print(f"PayPal Secret: {PAYPAL_SECRET}")  
-#print(f"PayPal Mode: {PAYPAL_MODE}")  
+print(f"PayPal Client ID: {PAYPAL_CLIENT_ID}")  
+print(f"PayPal Secret: {PAYPAL_SECRET}")  
+print(f"PayPal Mode: {PAYPAL_MODE}")
 
 # email notification notification
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
